@@ -1,6 +1,6 @@
-# dbWebGen-demo - Demo App for dbWebGen
+# Demo App for [dbWebGen](https://github.com/eScienceCenter/dbWebGen)
 
-This is the demo app for [dbWebGen](https://github.com/eScienceCenter/dbWebGen). It provides a web based user interface for working with data about buildings, locations and user reviews. 
+This is the demo app for [dbWebGen](https://github.com/eScienceCenter/dbWebGen). It provides a web based user interface for working with a mock database about buildings, locations and user reviews. 
 
 ## Data Model
 The data model of the demo database is depicted in the following ER diagram. The SQL script to create this database is listed in  [demo_db.sql](demo_db.sql).
