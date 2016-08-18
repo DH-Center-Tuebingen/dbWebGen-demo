@@ -1,6 +1,6 @@
 <?	
 	// helper variable
-	$ALL_ACTIONS = array(MODE_NEW, MODE_EDIT, MODE_LIST, MODE_VIEW, MODE_DELETE);
+	$ALL_ACTIONS = array(MODE_NEW, MODE_EDIT, MODE_LIST, MODE_VIEW, MODE_DELETE, MODE_LINK);
 	
 	/* ========================================================================================================	*/	
 	$APP = array(		
@@ -12,9 +12,11 @@
 		'pages_prevnext' => 2,
 		'mainmenu_tables_autosort' => true,
 		'search_lookup_resolve' => true,
-		'search_string_transformation' => 'lower(%s)',
+		'search_string_transformation' => 'lower((%s)::text)',
 		'null_label' => "<span class='nowrap' title='If you check this box, no value will be stored for this field. This may reflect missing, unknown, unspecified or inapplicable information. Note that no value (missing information) is different to providing an empty value: an empty value is a value.'>No Value</span>",		
-		'render_main_page_proc' => 'main_page'
+		'render_main_page_proc' => 'demo_main_page',
+		'menu_complete_proc' => 'demo_menu_complete',
+		'querypage_stored_queries_table' => 'stored_queries'
 	);
 	
 	/* ========================================================================================================	*/	
@@ -53,21 +55,9 @@
 			),
 			'fields' => array(			
 				'id' => array('label' => 'ID', 'type' => T_NUMBER, 'editable' => false),
-				'name' => array('label' => 'Full Name', 'type' => T_TEXT_LINE, 'len' => 50, 'required' => true),				
-				'login' => array('label' => 'Login ID', 'type' => T_TEXT_LINE, 'len' => 10, 'required' => true),				
-				'password' => array('label' => 'Password', 'type' => T_PASSWORD, 'len' => 32, 'required' => true, 'min_len' => 3),
-				'user_buildings_visited' => array('label' => 'Buildings Visited', 'required' => false, 
-					'type' => T_LOOKUP, 
-					'lookup' => array(
-						'cardinality' => CARDINALITY_MULTIPLE,
-						'table' => 'buildings',
-						'field' => 'id',
-						'display' => 'name'),
-					'linkage' => array(
-						'table' => 'user_buildings_visited',
-						'fk_self' => 'user_id',
-						'fk_other' => 'building_id')
-				),
+				'name' => array('label' => 'Full Name', 'type' => T_TEXT_LINE, 'len' => 50, 'required' => true),
+				'login' => array('label' => 'Login ID', 'type' => T_TEXT_LINE, 'len' => 10, 'required' => true),
+				'password' => array('label' => 'Password', 'type' => T_PASSWORD, 'len' => 32, 'required' => true, 'min_len' => 3),				
 			)			
 		),
 		
@@ -78,6 +68,9 @@
 			'description' => 'Pictures of buildings.',
 			'item_name' => 'Picture',
 			'primary_key' => array('auto' => true, 'columns' => array('id'), 'sequence_name' => 'pictures_id_seq'),
+			'render_links' => array(
+				array('icon' => 'eye-open', 'field' => 'filename', 'href_format' => 'pics/%s', 'title' => 'Show This Picture')
+			),
 			'sort' => array('filename' => 'asc'),			
 			'fields' => array(
 				'id' => array('label' => 'ID', 'type' => T_NUMBER, 'editable' => false),				
@@ -102,8 +95,28 @@
 				'id' => array('label' => 'ID', 'type' => T_NUMBER, 'editable' => false),				
 				'title' => array('label' => 'Title', 'type' => T_TEXT_LINE, 'len'=>100),
 				/* if you like to test the postgis extension: */ // 'spot' => array('label' => 'Spot', 'type' => T_POSTGIS_GEOM, 'SRID' => '4326', 'help' => 'Enter text representation of geometry, e.g. POINT(-71.06 32.4485). See <a href="http://postgis.net/docs/ST_GeomFromText.html" target="_blank">here</a> for help.'),
-				'pretty' => array('label'=>'Is this Pretty?', 'type'=>T_ENUM, 'default' => '0', 'values' => array('1' => 'Yes', '0' => 'No'))
-			)			
+				'pretty' => array('label'=>'Is this Pretty?', 'type'=>T_ENUM, 'default' => '0', 'values' => array('1' => 'Yes', '0' => 'No')),
+				'user_location_reviews' => array('label' => 'User Reviews', 'required' => false,
+					'type' => T_LOOKUP, 
+					'lookup' => array(
+						'cardinality' => CARDINALITY_MULTIPLE,
+						'table' => 'users',
+						'field' => 'id',
+						'display' => array(
+							'columns' => array('name', 'login'), 
+							'expression' => "concat(%1, ' (', %2, ')')"
+						),
+						'related_label' => 'Locations Reviewed By This User'),
+					'linkage' => array(
+						'table' => 'user_location_reviews',
+						'fk_self' => 'location_id',
+						'fk_other' => 'user_id')
+				),
+			),
+			'additional_steps' => array(
+				'buildings' => array('label' => 'Building At This Location', 'foreign_key' => 'location_id'),
+				'user_location_reviews' => array('label' => 'Review Of This Location', 'foreign_key' => 'location_id')
+			)
 		),
 		
 		// ----------------------------------------------------------------------------------------------------
@@ -118,21 +131,42 @@
 				'id' => array('label' => 'ID', 'type' => T_NUMBER, 'editable' => false),				
 				'name' => array('label' => 'Name', 'type' => T_TEXT_LINE, 'len'=>50, 'required'=>true),
 				'nr' => array('label' => 'Nr', 'type' => T_NUMBER),
-				'picture_id' => array('label' => 'Picture', 'type' => T_LOOKUP, 'required' => false, 'lookup' => array(
-					'cardinality' => CARDINALITY_SINGLE,
-					'table'   => 'pictures',
-					'field'   => 'id',
-					'display' => array(
-						'columns' => array('filename', 'label'),
-						'expression' => "%2 || ' (' || %1 || ')'"))
+				'picture_id' => array('label' => 'Picture', 'type' => T_LOOKUP, 'required' => false, 
+					'lookup' => array(
+						'cardinality' => CARDINALITY_SINGLE,
+						'table'   => 'pictures',
+						'field'   => 'id',
+						'display' => array(
+							'columns' => array('filename', 'label'),
+							'expression' => "%2 || ' (' || %1 || ')'"
+						),						
+						'related_label' => 'Buildings In This Picture'
+					)
 				),
 				'location_id' => array('label' => 'Location', 'type' => T_LOOKUP, 'required' => true, 'lookup' => array(
 					'cardinality' => CARDINALITY_SINGLE,
 					'table'   => 'locations',
 					'field'   => 'id',
-					'display' => 'title')
-				)
-			)			
+					'display' => 'title',
+					'related_label' => 'Buildings At This Location')
+				),
+				'user_buildings_visited' => array('label' => 'Previous Visitors', 'required' => false,
+					'type' => T_LOOKUP, 
+					'lookup' => array(
+						'cardinality' => CARDINALITY_MULTIPLE,
+						'table' => 'users',
+						'field' => 'id',
+						'display' => array(
+							'columns' => array('name', 'login'), 
+							'expression' => "concat(%1, ' (', %2, ')')"
+						),
+						'related_label' => 'Buildings Visited By This User'),
+					'linkage' => array(
+						'table' => 'user_buildings_visited',
+						'fk_self' => 'building_id',
+						'fk_other' => 'user_id')
+				),
+			)
 		),
 		
 		// ----------------------------------------------------------------------------------------------------
@@ -148,16 +182,18 @@
 					'cardinality' => CARDINALITY_SINGLE,
 					'table'   => 'users',
 					'field'   => 'id',
-					'display' => 'name')
+					'display' => 'name',
+					'related_label' => 'Reviews By This User')
 				),
 				'location_id' => array('label' => 'Location', 'type' => T_LOOKUP, 'required' => true, 'lookup' => array(
 					'cardinality' => CARDINALITY_SINGLE,
 					'table'   => 'locations',
 					'field'   => 'id',
-					'display' => 'title')
+					'display' => 'title',
+					'related_label' => 'Reviews Of This Location')
 				),
-				'rating' => array('label' => 'Rating (1-10)', 'type' => T_NUMBER, 'required' => true),
-				'review' => array('label' => 'Review Text', 'type' => T_TEXT_LINE, 'len' => 1000) 
+				'rating' => array('label' => 'Rating (1-10)', 'type' => T_NUMBER, 'required' => true, 'min' => 1, 'max' => 10),
+				'review' => array('label' => 'Review Text', 'type' => T_TEXT_AREA, 'len' => 1000) 
 			)			
 		),
 	);
