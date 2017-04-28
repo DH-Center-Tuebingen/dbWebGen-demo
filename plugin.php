@@ -14,7 +14,7 @@
 		$new = l10n('menu.new');
 		$browse = l10n('menu.browse+edit');
 
-		l10n_register('en', array(
+		l10n_register('demo.plugin', 'en', array(
 			'demo.menu.extras' => 'Extras',
 			'demo.menu.extras.new-query' => 'Query the Database',
 			'demo.menu.extras.list-queries' => 'Stored Queries',
@@ -26,7 +26,7 @@
 HTML
 		));
 
-		l10n_register('de', array(
+		l10n_register('demo.plugin', 'de', array(
 			'demo.menu.extras' => 'Extras',
 			'demo.menu.extras.new-query' => 'Neue Abfrage',
 			'demo.menu.extras.list-queries' => 'Gespeicherte Abfragen',
