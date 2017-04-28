@@ -17,7 +17,8 @@
 		'render_main_page_proc' => 'demo_main_page',
 		'menu_complete_proc' => 'demo_menu_complete',
 		'querypage_stored_queries_table' => 'stored_queries',
-		'global_search' => array('include_table' => true)
+		'global_search' => array('include_table' => true),
+		'preprocess_func' => 'demo_preprocess'
 	);
 
 	/* ========================================================================================================	*/
