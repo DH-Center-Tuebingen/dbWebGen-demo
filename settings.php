@@ -59,7 +59,7 @@
 				'id' => array('label' => 'ID', 'type' => T_NUMBER, 'editable' => false),
 				'name' => array('label' => 'Full Name', 'type' => T_TEXT_LINE, 'len' => 50, 'required' => true),
 				'login' => array('label' => 'Login ID', 'type' => T_TEXT_LINE, 'len' => 10, 'required' => true),
-				'password' => array('label' => 'Password', 'type' => T_PASSWORD, 'len' => 32, 'required' => true, 'min_len' => 3),
+				'password' => array('label' => 'Password', 'type' => T_PASSWORD, 'len' => 32, 'required' => true, 'min_len' => 3, 'placeholder' => 'Mind. 3 Zeichen'),
 			)
 		),
 
