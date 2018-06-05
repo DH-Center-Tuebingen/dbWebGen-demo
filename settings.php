@@ -116,7 +116,9 @@
 					'linkage' => array(
 						'table' => 'user_location_reviews',
 						'fk_self' => 'location_id',
-						'fk_other' => 'user_id')
+						'fk_other' => 'user_id',
+						'maxnum' => 2
+						)
 				),
 			),
 			'additional_steps' => array(
