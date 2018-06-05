@@ -93,6 +93,7 @@
 			'item_name' => 'Location',
 			'primary_key' => array('auto' => true, 'columns' => array('id'), 'sequence_name' => 'locations_id_seq'),
 			'sort' => array('title' => 'asc'),
+			'validation_func' => 'validate_form',
 			'fields' => array(
 				'id' => array('label' => 'ID', 'type' => T_NUMBER, 'editable' => false),
 				'title' => array('label' => 'Title', 'type' => T_TEXT_LINE, 'len'=>100),

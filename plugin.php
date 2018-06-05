@@ -11,6 +11,8 @@
 	// registered via $APP['preprocess_func']
 	function demo_preprocess() {
 	//------------------------------------------------------------------------------------------
+		add_javascript('plugin.js');
+
 		$new = l10n('menu.new');
 		$browse = l10n('menu.browse+edit');
 
