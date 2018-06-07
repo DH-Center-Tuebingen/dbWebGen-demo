@@ -1,4 +1,4 @@
--- first you need to create a database called 'demo'. 
+-- first you need to create a database called 'demo'.
 -- then run this script on the 'demo' database:
 
 create user demo_user with password 'test123';
@@ -8,15 +8,16 @@ create table users (
 	id serial primary key,
 	name varchar(50) not null,
 	login varchar(10) unique not null,
-	password char(32) not null	
+	password char(32) not null
 );
 insert into users(name, login, password) values('Demo God', 'test', md5('test'));
 
 drop table if exists pictures cascade;
 create table pictures (
-	id serial primary key ,	
-	filename varchar(1000) not null,	
-	label varchar(100) not null
+	id serial primary key ,
+	filename varchar(1000) not null,
+	label varchar(100) not null,
+	time_taken timestamp
 );
 
 drop table if exists locations cascade;

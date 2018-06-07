@@ -81,7 +81,13 @@
 					'store' => STORE_FOLDER,
 					'allowed_ext' => array('jpg', 'jpeg', 'png'),
 					'help' => 'Upload JPG and PNG images only.'),
-				'label' => array('label' => 'Label', 'type' => T_TEXT_LINE, 'len' => 100, 'required' => true)
+				'label' => array('label' => 'Label', 'type' => T_TEXT_LINE, 'len' => 100, 'required' => true),
+				'time_taken' => array('label' => 'Timestamp', 'type' => T_TEXT_LINE, 'datetime_picker' => array(
+					'format' => 'YYYY-MM-DD HH:mm',
+					'showTodayButton' => true,
+					'useStrict' => true,
+					'showClose' => true
+				))
 			)
 		),
 
