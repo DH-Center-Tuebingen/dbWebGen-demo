@@ -85,8 +85,8 @@
 				'time_taken' => array('label' => 'Timestamp', 'type' => T_TEXT_LINE, 'datetime_picker' => array(
 					'format' => 'YYYY-MM-DD HH:mm',
 					'showTodayButton' => true,
-					'useStrict' => true,
-					'showClose' => true
+					'showClose' => true,
+					'allowInputToggle' => true
 				))
 			)
 		),
