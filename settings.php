@@ -1,6 +1,6 @@
 <?
 	// helper variable
-	$ALL_ACTIONS = array(MODE_NEW, MODE_EDIT, MODE_LIST, MODE_VIEW, MODE_DELETE, MODE_LINK);
+	$ALL_ACTIONS = array(MODE_NEW, MODE_EDIT, MODE_LIST, MODE_VIEW, MODE_DELETE, MODE_LINK, MODE_MERGE);
 
 	/* ========================================================================================================	*/
 	$APP = array(
@@ -104,7 +104,10 @@
 				'id' => array('label' => 'ID', 'type' => T_NUMBER, 'editable' => false),
 				'title' => array('label' => 'Title', 'type' => T_TEXT_LINE, 'len'=>100),
 				/* if you like to test the postgis extension: */ // 'spot' => array('label' => 'Spot', 'type' => T_POSTGIS_GEOM, 'SRID' => '4326', 'help' => 'Enter text representation of geometry, e.g. POINT(-71.06 32.4485). See <a href="http://postgis.net/docs/ST_GeomFromText.html" target="_blank">here</a> for help.'),
-				'pretty' => array('label'=>'Is this Pretty?', 'type'=>T_ENUM, 'default' => '0', 'values' => array('1' => 'Yes', '0' => 'No')),
+				'pretty' => array('label' => 'Is this Pretty?', 'type' => T_BOOLEAN, 'default' => 'off', 'options' => array(
+					'on' => 'Oh yeah!',
+					'off' => 'No way!'
+				)),
 				'user_location_reviews' => array('label' => 'User Reviews', 'required' => false,
 					'type' => T_LOOKUP,
 					'lookup' => array(
