@@ -33,7 +33,8 @@ create table buildings(
 	name varchar(50) not null,
 	nr int check (nr > 0),
 	picture_id int references pictures(id),
-	location_id int not null references locations(id)
+	location_id int not null references locations(id),
+	dummy_conditional text
 );
 
 drop table if exists user_buildings_visited cascade;

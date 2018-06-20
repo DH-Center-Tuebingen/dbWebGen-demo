@@ -175,6 +175,19 @@
 					'async' => array('min_input_len' => 2),
 					'label_display_expr_only' => true)
 				),
+				'dummy_conditional' => array( // this is just a dummy field to demonstrate the conditional display expression capabilities
+					'label' => 'Position within Location',
+					'type' => T_TEXT_AREA,
+					'conditional_display' => array(
+						OPERATOR_GROUP_OPEN,
+						array('field' => 'location_id', 'operator' => OPERATOR_NOT_EQUALS, 'value' => ''),
+						OPERATOR_AND,
+						array('field' => 'nr', 'operator' => OPERATOR_BETWEEN, 'value' => array(3, 7)),
+						OPERATOR_GROUP_CLOSE,
+						OPERATOR_OR,
+						array('field' => 'name', 'operator' => OPERATOR_EQUALS, 'value' => array('Staatsoper', 'Dönerladen'))
+					)
+				),
 				'user_buildings_visited' => array('label' => 'Previous Visitors', 'required' => false,
 					'type' => T_LOOKUP,
 					'lookup' => array(
