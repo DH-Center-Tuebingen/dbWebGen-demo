@@ -264,6 +264,10 @@ $TABLES = array (
         'type' => 'T_TextArea',
         'required' => false,
         'len' => 1000,
+        'richtext' => [
+          'editor' => 'trumbowyg',
+          'init_options' => []
+        ]
       ),
     ),
   ),
