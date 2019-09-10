@@ -1,4 +1,4 @@
-<?
+<?php
 	//------------------------------------------------------------------------------------------
 	// registered via $APP['render_main_page_proc']
 	function demo_main_page() {
